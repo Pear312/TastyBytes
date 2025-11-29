@@ -1,5 +1,6 @@
 # TastyBytes
 
-## Start database
-1) chmod +x run_table.sh  
-2) ./run_init.sh
+## Start database (macOS w/ homebrew)
+1) chmod +x run_table.sh
+2) brew services start mysql
+3) ./run_table.sh
