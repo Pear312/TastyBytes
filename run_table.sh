@@ -1,12 +1,8 @@
 #!/bin/bash
 source .env
 
-echo "Starting MySQL server..."
-sudo systemctl start mysql
-
-SQL_FILE="init_table.sql"
-
+source .env
 echo "Running $SQL_FILE..."
-mysql -u root < "$SQL_FILE"
+mysql -u root -p"$MYSQL_PWD" < "$SQL_FILE"
 
 echo "Done!"

@@ -11,6 +11,16 @@ con=mysql.connector.connect(
     host="localhost",
     user="root",
     password="",
-    database="tastybytes"
+    database="tastybytes_db"
 )
+
+@app.route('/getTables', methods=['GET'])
+def get_tables():
+    cursor = con.cursor()
+    cursor.execute("SHOW TABLES")
+    
+
+
+if __name__ == "__main__":
+    app.run()
 
