@@ -1,7 +1,6 @@
 #!/bin/bash
 source .env
 
-source .env
 echo "Running $SQL_FILE..."
 mysql -u root -p"$MYSQL_PWD" < "$SQL_FILE"
 

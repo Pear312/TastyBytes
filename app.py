@@ -20,7 +20,6 @@ def get_tables():
     cursor.execute("SHOW TABLES")
     
 
-
 if __name__ == "__main__":
     app.run()
 
