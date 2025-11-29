@@ -20,3 +20,13 @@ def get_db_conn():
     except Error as e:
         print(f"Error connecting to database: {e}")
         return None
+
+@app.route('/getTables', methods=['GET'])
+def get_tables():
+    cursor = con.cursor()
+    cursor.execute("SHOW TABLES")
+    
+
+if __name__ == "__main__":
+    app.run()
+
