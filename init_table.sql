@@ -1,3 +1,7 @@
+DROP DATABASE IF EXISTS tastybytes_db;
+CREATE DATABASE tastybytes_db;
+USE tastybytes_db;
+
 CREATE TABLE users (
     user_id INT AUTO_INCREMENT,
     username VARCHAR(255),
@@ -124,22 +128,22 @@ INSERT INTO recipes (user_id, title, description, instructions, cook_time_min, s
     '1. Cook spaghetti.\n2. Fry pancetta.\n3. Mix eggs and cheese.\n4. Combine all ingredients.',
     25, 4),
 
-(2, 'Chocolate Chip Cookies',
+(1, 'Chocolate Chip Cookies',
     'Soft and chewy cookies loaded with chocolate chips.',
     '1. Mix dry ingredients.\n2. Cream butter and sugar.\n3. Add chocolate chips.\n4. Bake at 350°F for 12 minutes.',
     30, 24),
 
-(3, 'Chicken Stir Fry',
+(1, 'Chicken Stir Fry',
     'Quick stir-fried chicken and mixed vegetables with soy sauce.',
     '1. Slice chicken.\n2. Stir-fry vegetables.\n3. Add chicken and sauce.\n4. Serve with rice.',
     20, 3),
 
-(4, 'Avocado Toast with Egg',
+(1, 'Avocado Toast with Egg',
     'Healthy breakfast toast with mashed avocado and fried egg.',
     '1. Toast bread.\n2. Mash avocado.\n3. Fry egg.\n4. Assemble toast and season.',
     10, 1),
 
-(5, 'BBQ Grilled Chicken',
+(1, 'BBQ Grilled Chicken',
     'Juicy grilled chicken coated in smoky BBQ sauce.',
     '1. Season chicken.\n2. Grill 6–7 min each side.\n3. Add BBQ sauce.\n4. Grill 2 more minutes.',
     35, 4);
@@ -177,7 +181,7 @@ INSERT INTO recipe_ingredients VALUES
 (2, 6, '100g'),
 (2, 7, '150g'),
 (2, 8, '200g'),
-(2, 2, '1'); 
+(2, 2, '1');
 
 -- Chicken Stir Fry
 INSERT INTO recipe_ingredients VALUES
@@ -251,17 +255,17 @@ INSERT INTO recipe_categories VALUES (4, 6);
 INSERT INTO recipe_categories VALUES (5, 4), (5, 7);
 
 INSERT INTO favorite_recipes VALUES
+(1, 1),
 (1, 2),
-(2, 1),
-(3, 3),
-(4, 4),
-(5, 5);
+(1, 3),
+(1, 4),
+(1, 5);
 
 INSERT INTO comments (recipe_id, user_id, rating) VALUES
-(1, 2, 5),
-(1, 3, 4),
+(1, 1, 5),
+(1, 1, 4),
 (2, 1, 5),
 (3, 1, 4),
-(3, 2, 5),
-(4, 5, 4),
-(5, 4, 5);
+(3, 1, 5),
+(4, 1, 4),
+(5, 1, 5);
