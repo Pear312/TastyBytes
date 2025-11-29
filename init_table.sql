@@ -127,22 +127,18 @@ INSERT INTO recipes (user_id, title, description, instructions, cook_time_min, s
     'Classic Italian pasta with eggs, cheese, pancetta, and pepper.',
     '1. Cook spaghetti.\n2. Fry pancetta.\n3. Mix eggs and cheese.\n4. Combine all ingredients.',
     25, 4),
-
 (1, 'Chocolate Chip Cookies',
     'Soft and chewy cookies loaded with chocolate chips.',
     '1. Mix dry ingredients.\n2. Cream butter and sugar.\n3. Add chocolate chips.\n4. Bake at 350°F for 12 minutes.',
     30, 24),
-
 (1, 'Chicken Stir Fry',
     'Quick stir-fried chicken and mixed vegetables with soy sauce.',
     '1. Slice chicken.\n2. Stir-fry vegetables.\n3. Add chicken and sauce.\n4. Serve with rice.',
     20, 3),
-
 (1, 'Avocado Toast with Egg',
     'Healthy breakfast toast with mashed avocado and fried egg.',
     '1. Toast bread.\n2. Mash avocado.\n3. Fry egg.\n4. Assemble toast and season.',
     10, 1),
-
 (1, 'BBQ Grilled Chicken',
     'Juicy grilled chicken coated in smoky BBQ sauce.',
     '1. Season chicken.\n2. Grill 6–7 min each side.\n3. Add BBQ sauce.\n4. Grill 2 more minutes.',
@@ -168,38 +164,25 @@ INSERT INTO ingredients (name) VALUES
 ('Chicken Thighs'),
 ('Olive Oil');
 
--- Spaghetti Carbonara
-INSERT INTO recipe_ingredients VALUES
+INSERT INTO recipe_ingredients (recipe_id, ingredient_id, quantity) VALUES
 (1, 1, '200g'),
 (1, 2, '2'),
 (1, 3, '100g'),
 (1, 4, '50g'),
-(1, 5, '1 tsp');
-
--- Chocolate Chip Cookies
-INSERT INTO recipe_ingredients VALUES
+(1, 5, '1 tsp'),
 (2, 6, '100g'),
 (2, 7, '150g'),
 (2, 8, '200g'),
-(2, 2, '1');
-
--- Chicken Stir Fry
-INSERT INTO recipe_ingredients VALUES
+(2, 2, '1'),
 (3, 9, '250g'),
 (3, 10, '1 cup'),
 (3, 11, '2 tbsp'),
-(3, 12, '1 cup');
-
--- Avocado Toast
-INSERT INTO recipe_ingredients VALUES
+(3, 12, '1 cup'),
 (4, 13, '1 slice'),
 (4, 14, '1 whole'),
 (4, 2, '1'),
 (4, 15, '1 pinch'),
-(4, 18, '1 tsp');
-
--- BBQ Grilled Chicken
-INSERT INTO recipe_ingredients VALUES
+(4, 18, '1 tsp'),
 (5, 17, '4 pieces'),
 (5, 16, '3 tbsp'),
 (5, 15, '1 tsp'),
@@ -215,20 +198,18 @@ INSERT INTO tags (tag_name) VALUES
 ('Breakfast'),
 ('Grilled');
 
--- Spaghetti Carbonara
-INSERT INTO recipe_tags VALUES (1, 1), (1, 5);
-
--- Chocolate Chip Cookies
-INSERT INTO recipe_tags VALUES (2, 2), (2, 6);
-
--- Chicken Stir Fry
-INSERT INTO recipe_tags VALUES (3, 3), (3, 4), (3, 5);
-
--- Avocado Toast
-INSERT INTO recipe_tags VALUES (4, 4), (4, 7);
-
--- BBQ Grilled Chicken
-INSERT INTO recipe_tags VALUES (5, 5), (5, 8);
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES
+(1, 1),
+(1, 5),
+(2, 2),
+(2, 6),
+(3, 3),
+(3, 4),
+(3, 5),
+(4, 4),
+(4, 7),
+(5, 5),
+(5, 8);
 
 INSERT INTO categories (name) VALUES
 ('Pasta'),
@@ -239,22 +220,18 @@ INSERT INTO categories (name) VALUES
 ('Breakfast'),
 ('Grilling');
 
--- Spaghetti Carbonara
-INSERT INTO recipe_categories VALUES (1, 1), (1, 4);
+INSERT INTO recipe_categories (recipe_id, category_id) VALUES
+(1, 1),
+(1, 4),
+(2, 2),
+(2, 5),
+(3, 3),
+(3, 4),
+(4, 6),
+(5, 4),
+(5, 7);
 
--- Chocolate Chip Cookies
-INSERT INTO recipe_categories VALUES (2, 2), (2, 5);
-
--- Chicken Stir Fry
-INSERT INTO recipe_categories VALUES (3, 3), (3, 4);
-
--- Avocado Toast
-INSERT INTO recipe_categories VALUES (4, 6);
-
--- BBQ Grilled Chicken
-INSERT INTO recipe_categories VALUES (5, 4), (5, 7);
-
-INSERT INTO favorite_recipes VALUES
+INSERT INTO favorite_recipes (user_id, recipe_id) VALUES
 (1, 1),
 (1, 2),
 (1, 3),
