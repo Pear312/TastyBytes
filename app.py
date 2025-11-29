@@ -23,9 +23,31 @@ def get_db_conn():
 
 @app.route('/getTables', methods=['GET'])
 def get_tables():
-    cursor = con.cursor()
+    conn = get_db_conn()
+    if not conn:
+        return jsonify({"error": "Database connection failed"}), 500
+
+    cursor = conn.cursor()
     cursor.execute("SHOW TABLES")
-    
+    tables = [row[0] for row in cursor.fetchall()]
+
+    cursor.close()
+    conn.close()
+
+    return jsonify({"tables": tables})
+
+@app.route("/recipes", methods=["GET"])
+def get_recipes():
+    conn = get_db_conn()
+    if not conn:
+        return jsonify({"error": "Database connection failed"}), 500
+
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM recipes")
+    recipes = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(recipes)
 
 if __name__ == "__main__":
     app.run()
