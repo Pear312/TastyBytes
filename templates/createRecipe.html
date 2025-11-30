@@ -3,27 +3,66 @@
 
 <h1>Create New Recipe</h1>
 
-<form action="/create" method="POST" class="form">
+<form action="/create" method="POST" class="create-form">
 
-    <label>Title</label>
-    <input type="text" name="title" required>
+    <h3>Basic Information</h3>
 
-    <label>Description</label>
-    <textarea name="description"></textarea>
+    <div class="form-row">
+        <label>Recipe Title</label>
+        <input type="text" name="title" placeholder="e.g., Chocolate Chip Cookies">
+    </div>
 
-    <label>Cook Time (minutes)</label>
-    <input type="number" name="cook_time">
+    <div class="form-row">
+        <label>Description</label>
+        <textarea name="description" placeholder="Brief description of your recipe"></textarea>
+    </div>
 
-    <label>Servings</label>
-    <input type="number" name="servings">
+    <div class="form-2col">
+        <div>
+            <label>Cook Time</label>
+            <input type="text" name="time" placeholder="e.g., 30 min">
+        </div>
 
-    <label>Ingredients (one per line, format: quantity - name)</label>
-    <textarea name="ingredients" placeholder="1 cup - flour\n2 tbsp - olive oil"></textarea>
+        <div>
+            <label>Servings</label>
+            <input type="number" name="servings" placeholder="e.g., 4">
+        </div>
+    </div>
 
-    <label>Instructions (one step per line)</label>
-    <textarea name="instructions" placeholder="Step 1...\nStep 2..."></textarea>
+    <h3>Ingredients</h3>
+    <div id="ingredient-list" class="form-row">
+        <input type="text" name="ingredients" placeholder="Ingredient 1">
+    </div>
+    <button type="button" onclick="addIngredient()">+ Add Ingredient</button>
 
-    <button class="btn">Create Recipe</button>
+    <h3>Instructions</h3>
+    <div id="instruction-list" class="form-row">
+        <textarea name="instructions" placeholder="Step 1"></textarea>
+    </div>
+    <button type="button" onclick="addInstruction()">+ Add Step</button>
+
+    <br><br>
+    <button type="submit" class="btn">Create Recipe</button>
+
 </form>
+
+<script>
+function addIngredient() {
+    const list = document.getElementById("ingredient-list");
+    const input = document.createElement("input");
+    input.type = "text";
+    input.name = "ingredients";
+    input.placeholder = "New ingredient";
+    list.appendChild(input);
+}
+
+function addInstruction() {
+    const list = document.getElementById("instruction-list");
+    const textarea = document.createElement("textarea");
+    textarea.name = "instructions";
+    textarea.placeholder = "New step";
+    list.appendChild(textarea);
+}
+</script>
 
 {% endblock %}

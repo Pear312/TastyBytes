@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
 
-<!-- LIST MODE -->
 {% if recipe_list %}
 <h1>All Recipes</h1>
 
@@ -9,23 +8,21 @@
     {% for r in recipe_list %}
     <a href="/recipe/{{ r[0] }}" class="recipe-card">
         <h3>{{ r[1] }}</h3>
-        <p>{{ r[2][:100] }}...</p>
+        <p>{{ r[2][:120] }}...</p>
     </a>
     {% endfor %}
 </div>
 
 {% else %}
-<!-- DETAIL MODE -->
-<h1>{{ recipe.title }}</h1>
-<p>{{ recipe.description }}</p>
 
-<!-- Basic info -->
+<h1>{{ recipe.title }}</h1>
+<p style="font-size: 18px; color: #555;">{{ recipe.description }}</p>
+
 <div class="info-box">
     <p><strong>Cook Time:</strong> {{ recipe.cook_time_min }} min</p>
     <p><strong>Servings:</strong> {{ recipe.servings }}</p>
 </div>
 
-<!-- Ingredients -->
 <h2>Ingredients</h2>
 <ul>
     {% for ing in ingredients %}
@@ -33,24 +30,21 @@
     {% endfor %}
 </ul>
 
-<!-- Instructions -->
 <h2>Instructions</h2>
 <ol>
     {% for step in recipe.instructions.split('\n') %}
-        <li>
-            {{
-                step.split('. ', 1)[1]
-                    .replace('°F', 'F')
-                    .replace('°', '')
-                    .replace('Â°', '')
-            }}
-        </li>
-
-
+        {% if '. ' in step %}
+            {% set clean_step = step.split('. ', 1)[1]
+                                    .replace('°F','F')
+                                    .replace('°','')
+                                    .replace('Â°','') %}
+        {% else %}
+            {% set clean_step = step %}
+        {% endif %}
+        <li>{{ clean_step }}</li>
     {% endfor %}
 </ol>
 
-<!-- Tags -->
 <h2>Tags</h2>
 <div class="tag-box">
     {% for t in tags %}
@@ -58,13 +52,69 @@
     {% endfor %}
 </div>
 
-<!-- Comments -->
 <h2>Comments</h2>
 <ul class="comment-box">
     {% for c in comments %}
-        <li><strong>Rating:</strong> {{ c[0] }}/5</li>
+    <li style="margin-bottom: 20px;">
+        <strong>{{ c.username or "Anonymous" }}</strong>
+
+        {% if c.rating %}
+            &nbsp;
+            {% for i in range(c.rating) %}
+                <span class="star">★</span>
+            {% endfor %}
+            {% for i in range(5 - c.rating) %}
+                <span class="star" style="color:#ddd;">★</span>
+            {% endfor %}
+        {% endif %}
+
+        {% if c.comment %}
+        <div style="margin-top: 4px; font-size: 15px;">
+            {{ c.comment }}
+        </div>
+        {% endif %}
+    </li>
     {% endfor %}
 </ul>
+
+<hr>
+
+<h3>Leave a Review</h3>
+
+<form action="/review/{{ recipe.recipe_id }}" method="POST" class="review-form">
+
+    <!-- STAR RATING -->
+    <div class="star-rate">
+        {% for i in range(1,6) %}
+            <button 
+                type="button" 
+                class="star-button" 
+                onclick="setRating({{ i }})"
+                id="star-{{ i }}"
+            >★</button>
+        {% endfor %}
+    </div>
+
+    <input type="hidden" name="rating" id="rating-input" required>
+
+    <!-- COMMENT TEXT -->
+    <textarea name="comment" placeholder="Write your comment..." required></textarea>
+
+    <button type="submit" class="submit-review-btn">Submit Review</button>
+</form>
+
+<script>
+    function setRating(val) {
+        document.getElementById("rating-input").value = val;
+
+        // Highlight the stars
+        for (let i = 1; i <= 5; i++) {
+            let s = document.getElementById("star-" + i);
+            if (i <= val) s.style.color = "gold";
+            else s.style.color = "#ccc";
+        }
+    }
+</script>
 
 {% endif %}
 
