@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1 class="title">Find Your Next Favorite Recipe</h1>
+
+<form class="search-bar" action="/search">
+    <input type="text" name="q" placeholder="Search recipes...">
+    <button>Search</button>
+</form>
+
+<h2 class="section-title">Featured Recipes</h2>
+
+<div class="recipe-grid">
+    {% for r in recipes %}
+    <a href="/recipe/{{ r[0] }}" class="recipe-card">
+        <h3>{{ r[1] }}</h3>
+        <p>{{ r[2][:80] }}...</p>
+    </a>
+    {% endfor %}
+</div>
+
+{% endblock %}
