@@ -31,7 +31,9 @@ CREATE TABLE comments (
     comment_id INT AUTO_INCREMENT,
     recipe_id INT,
     user_id INT,
-    rating INT,
+    rating INT NOT NULL,
+    comment TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(comment_id),
     FOREIGN KEY(recipe_id)
         REFERENCES recipes(recipe_id)
@@ -42,6 +44,8 @@ CREATE TABLE comments (
         ON DELETE SET NULL
         ON UPDATE CASCADE
 );
+
+
 
 CREATE TABLE favorite_recipes (
     user_id INT,
@@ -238,11 +242,30 @@ INSERT INTO favorite_recipes (user_id, recipe_id) VALUES
 (1, 4),
 (1, 5);
 
-INSERT INTO comments (recipe_id, user_id, rating) VALUES
-(1, 1, 5),
-(1, 1, 4),
-(2, 1, 5),
-(3, 1, 4),
-(3, 1, 5),
-(4, 1, 4),
-(5, 1, 5);
+INSERT INTO comments (recipe_id, user_id, rating, comment) VALUES
+-- Spaghetti Carbonara (recipe_id = 1)
+(1, 1, 5, 'Authentic flavor and super easy to make!'),
+(1, 1, 4, 'Really good, just added extra cheese.'),
+(1, 1, 5, 'Tasted exactly like a restaurant dish.'),
+(1, 1, 4, 'Quick meal—creamy and delicious.'),
+
+-- Chocolate Chip Cookies (recipe_id = 2)
+(2, 1, 5, 'Perfectly chewy and full of chocolate chips!'),
+(2, 1, 5, 'My kids devoured these! Best cookie recipe so far.'),
+(2, 1, 4, 'Great taste. I baked them 2 minutes less for extra softness.'),
+(2, 1, 5, 'Crispy edges and gooey center—amazing.'),
+
+-- Chicken Stir Fry (recipe_id = 3)
+(3, 1, 5, 'Healthy, quick, and delicious. Definitely making again!'),
+(3, 1, 4, 'Great weeknight dinner. Added extra soy sauce.'),
+(3, 1, 5, 'Simple and flavorful. Loved it!'),
+
+-- Avocado Toast with Egg (recipe_id = 4)
+(4, 1, 4, 'Perfect breakfast! Light and tasty.'),
+(4, 1, 5, 'So simple yet so good. The fried egg is the best part.'),
+(4, 1, 4, 'Easy and healthy—my new go-to morning meal.'),
+
+-- BBQ Grilled Chicken (recipe_id = 5)
+(5, 1, 5, 'Smoky and tender—everyone loved it.'),
+(5, 1, 4, 'Great flavor. I marinated it longer for extra tenderness.'),
+(5, 1, 5, 'Restaurant quality! The BBQ glaze caramelized perfectly.');
