@@ -22,7 +22,10 @@
 
     <h3>Ingredients</h3>
     <div id="ingredient-list">
-        <input type="text" name="ingredient[]" placeholder="Ingredient 1">
+        <div class="ingredient-row">
+            <input type="text" name="ingredient_name[]" placeholder="Ingredient" class="ingredient-name">
+            <input type="text" name="ingredient_qty[]" placeholder="Quantity" class="ingredient-qty">
+        </div>
     </div>
 
     <button type="button" onclick="addIngredient()" class="add-btn">+ Add Ingredient</button>
@@ -42,7 +45,6 @@
 
     <button type="button" onclick="addTag()" class="add-btn">+ Add Tag</button>
 
-
     <br><br>
 
     <button type="submit" class="submit-btn">Create Recipe</button>
@@ -52,12 +54,27 @@
 
 <script>
 function addIngredient() {
-    const container = document.getElementById("ingredient-list");
-    const input = document.createElement("input");
-    input.type = "text";
-    input.name = "ingredient[]";
-    input.placeholder = "Ingredient";
-    container.appendChild(input);
+    const list = document.getElementById("ingredient-list");
+
+    const row = document.createElement("div");
+    row.className = "ingredient-row";
+
+    const nameInput = document.createElement("input");
+    nameInput.type = "text";
+    nameInput.name = "ingredient_name[]";
+    nameInput.placeholder = "Ingredient";
+    nameInput.className = "ingredient-name";
+
+    const qtyInput = document.createElement("input");
+    qtyInput.type = "text";
+    qtyInput.name = "ingredient_qty[]";
+    qtyInput.placeholder = "Quantity";
+    qtyInput.className = "ingredient-qty";
+
+    row.appendChild(nameInput);
+    row.appendChild(qtyInput);
+
+    list.appendChild(row);
 }
 
 function addInstruction() {
@@ -81,6 +98,16 @@ function addTag() {
 </script>
 
 <style>
+.ingredient-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+.ingredient-name, .ingredient-qty {
+    padding: 5px;
+    flex: 1;
+}
+
 .form-container {
     background: #fff;
     padding: 25px;
