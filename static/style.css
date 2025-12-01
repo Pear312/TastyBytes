@@ -53,6 +53,23 @@ body {
     padding: 20px 0;
 }
 
+/* =============================== */
+/*          PAGE TITLES            */
+/* =============================== */
+
+.page-title {
+    font-size: 36px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #6b7280;
+    margin-bottom: 25px;
+}
+
 h1, h2 {
     color: #222;
 }
@@ -67,7 +84,7 @@ h2 {
 }
 
 /* =============================== */
-/*          SEARCH BAR             */
+/*           SEARCH BAR            */
 /* =============================== */
 
 .search-bar {
@@ -96,6 +113,61 @@ h2 {
 
 .search-bar button:hover {
     background: darkorange;
+}
+
+/* =============================== */
+/*          GLOBAL BUTTONS         */
+/* =============================== */
+
+.btn,
+button.btn {
+    display: inline-block;
+    padding: 10px 18px;
+    border-radius: 8px;
+    background: #ff9500;
+    color: white;
+    border: none;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.15s ease;
+    text-decoration: none;
+}
+
+.btn:hover,
+button.btn:hover {
+    background: #dd7a00;
+}
+
+/* =============================== */
+/*           FORM WRAPPER          */
+/* =============================== */
+
+.form-box {
+    background: white;
+    padding: 30px;
+    max-width: 450px;
+    margin: auto;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
+
+.form-box input,
+.form-box textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+    margin-bottom: 14px;
+}
+
+.form-box input:focus,
+.form-box textarea:focus {
+    outline: none;
+    border-color: #ff9500;
+    box-shadow: 0 0 0 1px #ffb94f;
 }
 
 /* =============================== */
@@ -178,6 +250,12 @@ h2 {
 /*        INTERACTIVE RATING       */
 /* =============================== */
 
+.star-rate {
+    display: flex;
+    gap: 5px;
+    margin: 10px 0;
+}
+
 .star-button {
     background: none;
     border: none;
@@ -193,56 +271,83 @@ h2 {
     transform: scale(1.2);
 }
 
-.star-rate {
+/* =============================== */
+/*        CREATE RECIPE FORM       */
+/* =============================== */
+
+.form-container {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    max-width: 700px;
+    margin: auto;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
+
+.form-container input,
+.form-container textarea {
+    width: 100%;
+    padding: 8px;
+    margin: 6px 0 12px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.form-container h3 {
+    margin-top: 25px;
+    margin-bottom: 10px;
+}
+
+.ingredient-row {
     display: flex;
-    gap: 5px;
-    margin: 10px 0;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.ingredient-name,
+.ingredient-qty {
+    padding: 5px;
+    flex: 1;
+}
+
+.add-btn,
+.submit-btn {
+    background: #ff9500;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.add-btn:hover,
+.submit-btn:hover {
+    background: #dd7a00;
 }
 
 /* =============================== */
-/*  CREATE RECIPE STYLES  */
+/*     SINGLE RECIPE PAGE LAYOUT   */
 /* =============================== */
 
-.create-form {
+.recipe-two-col {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.card-box {
     background: white;
     padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    width: 80%;
-    margin: auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
 }
 
-.create-form input,
-.create-form textarea {
-    width: 100%;
-    padding: 8px !important;
-    border: 1px solid #ccc !important;
-    border-radius: 4px !important;
-    font-size: 14px !important;
-    background: white !important;
-}
-
-.create-form label {
-    font-weight: bold;
-    margin-top: 10px;
-    display: block;
-}
-
-.create-form button {
-    padding: 8px 12px !important;
-    background: orange !important;
-    color: white !important;
-    border: none !important;
-    border-radius: 4px !important;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-.create-form button:hover {
-    background: #dd7a00 !important;
-}
-
-#create-form #ingredient-list input,
-#create-form #instruction-list textarea {
-    margin-top: 5px;
+.instructions-list {
+    line-height: 1.6;
 }
