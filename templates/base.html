@@ -12,10 +12,18 @@
     <ul>
         <li><a href="/">Home</a></li>
         <li><a href="/recipes">Recipes</a></li>
-        <li><a href="/create">Create Recipe</a></li>
-        <li><a href="/login">Login</a></li>
+
+        {% if session.get("user_id") %}
+            <li><a href="/create">Create Recipe</a></li>
+            <li style="color: #ffcc66; font-weight: bold;">Hello, {{ session.get("username") }}</li>
+            <li><a href="/logout">Logout</a></li>
+        {% else %}
+            <li><a href="/login">Login</a></li>
+            <li><a href="/register">Register</a></li>
+        {% endif %}
     </ul>
 </nav>
+
 
 <div class="content">
     {% block content %}{% endblock %}
