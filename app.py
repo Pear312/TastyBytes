@@ -79,7 +79,6 @@ def recipe(recipe_id):
     """, (recipe_id,))
     comments = cursor.fetchall()
 
-    # ⭐ FAVORITE STATUS (true/false)
     user_id = session.get("user_id")
     is_favorited = False
 
