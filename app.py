@@ -13,7 +13,7 @@ app.secret_key = "d93f1b063921f64b2f3ea042bd46c1f7fd0d10c55d3be98d5ea83c71e4ac6d
 con = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="Bagel01!",
+    password="your_password_here",
     database="tastybytes_db"
 )
 
@@ -212,7 +212,8 @@ def create():
 
         # Lists from dynamic fields
         instructions = request.form.getlist("instruction[]")
-        ingredients = request.form.getlist("ingredient[]")
+        ingredient_names = request.form.getlist("ingredient_name[]")
+        ingredient_qtys = request.form.getlist("ingredient_qty[]")
         
         tags_list = [t.strip().lower() for t in request.form.getlist("tags") if t.strip()]
 
@@ -229,22 +230,21 @@ def create():
         recipe_id = cursor.lastrowid
 
         # INSERT INGREDIENTS INTO DATABASE
-        for ing in ingredients:
-            ing = ing.strip()
-            if ing != "":
-                cursor.execute("INSERT INTO ingredients (name) VALUES (%s)", (ing,))
+        for name, qty in zip(ingredient_names, ingredient_qtys):
+            name = name.strip()
+            qty = qty.strip()
+            if name != "":
+                cursor.execute("INSERT INTO ingredients (name) VALUES (%s)", (name,))
                 ingredient_id = cursor.lastrowid
 
                 cursor.execute("""
                     INSERT INTO recipe_ingredients (recipe_id, ingredient_id, quantity)
                     VALUES (%s, %s, %s)
-                """, (recipe_id, ingredient_id, ""))
+                """, (recipe_id, ingredient_id, qty))
 
         con.commit()
         
-        # -----------------------------
         # TAGS
-        # -----------------------------
 
         cursor = con.cursor()
 
