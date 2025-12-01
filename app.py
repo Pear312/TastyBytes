@@ -47,11 +47,11 @@ def recipe(recipe_id):
 
     cursor = con.cursor(dictionary=True)
 
-    # Main recipe info
+    # Get recipe info
     cursor.execute("SELECT * FROM recipes WHERE recipe_id=%s", (recipe_id,))
     recipe = cursor.fetchone()
 
-    # Ingredients
+    # Get ingredients
     cursor.execute("""
         SELECT ingredients.name, recipe_ingredients.quantity AS qty
         FROM recipe_ingredients
@@ -60,7 +60,7 @@ def recipe(recipe_id):
     """, (recipe_id,))
     ingredients = cursor.fetchall()
 
-    # Tags
+    # Get tags
     cursor.execute("""
         SELECT tags.tag_name
         FROM tags
@@ -69,7 +69,7 @@ def recipe(recipe_id):
     """, (recipe_id,))
     tags = [t["tag_name"] for t in cursor.fetchall()]
 
-    # COMMENTS + USERNAME
+    # Comments
     cursor.execute("""
         SELECT comments.rating, comments.comment, users.username
         FROM comments
@@ -79,12 +79,24 @@ def recipe(recipe_id):
     """, (recipe_id,))
     comments = cursor.fetchall()
 
+    # ⭐ FAVORITE STATUS (true/false)
+    user_id = session.get("user_id")
+    is_favorited = False
+
+    if user_id:
+        cursor.execute("""
+            SELECT * FROM favorite_recipes
+            WHERE user_id=%s AND recipe_id=%s
+        """, (user_id, recipe_id))
+        is_favorited = cursor.fetchone() is not None
+
     return render_template(
         'recipe.html',
         recipe=recipe,
         ingredients=ingredients,
         tags=tags,
-        comments=comments
+        comments=comments,
+        is_favorited=is_favorited
     )
 
 
@@ -113,6 +125,71 @@ def add_review(recipe_id):
 
     return redirect(f"/recipe/{recipe_id}")
 
+# -----------------------------
+# ADD FAVORITE RECIPE
+# -----------------------------
+@app.route('/favorite/<int:recipe_id>', methods=["POST"])
+def favorite(recipe_id):
+
+    user_id = session.get("user_id")
+    if not user_id:
+        return redirect("/login")
+
+    cursor = con.cursor()
+
+    # Avoid duplicates
+    cursor.execute("""
+        SELECT * FROM favorite_recipes 
+        WHERE user_id=%s AND recipe_id=%s
+    """, (user_id, recipe_id))
+    exists = cursor.fetchone()
+
+    if not exists:
+        cursor.execute("""
+            INSERT INTO favorite_recipes (user_id, recipe_id)
+            VALUES (%s, %s)
+        """, (user_id, recipe_id))
+        con.commit()
+
+    return redirect(f"/recipe/{recipe_id}")
+
+# -----------------------------
+# FAVORITE RECIPES PAGE
+# -----------------------------
+@app.route('/favorites')
+def favorites():
+    user_id = session.get("user_id")
+    if not user_id:
+        return redirect("/login")
+
+    cursor = con.cursor()
+    cursor.execute("""
+        SELECT recipes.recipe_id, recipes.title, recipes.description
+        FROM favorite_recipes
+        JOIN recipes ON recipes.recipe_id = favorite_recipes.recipe_id
+        WHERE favorite_recipes.user_id=%s
+    """, (user_id,))
+    favorites = cursor.fetchall()
+
+    return render_template("favorites.html", favorites=favorites)
+
+# -----------------------------
+# REMOVE FAVORITE RECIPE
+# -----------------------------
+@app.route("/unfavorite/<int:recipe_id>", methods=["POST"])
+def unfavorite(recipe_id):
+    user_id = session.get("user_id")
+    if not user_id:
+        return redirect("/login")
+
+    cursor = con.cursor()
+    cursor.execute(
+        "DELETE FROM favorite_recipes WHERE user_id=%s AND recipe_id=%s",
+        (user_id, recipe_id)
+    )
+    con.commit()
+
+    return redirect("/favorites")
 
 
 # -----------------------------
