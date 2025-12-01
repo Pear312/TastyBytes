@@ -13,7 +13,7 @@ app.secret_key = "d93f1b063921f64b2f3ea042bd46c1f7fd0d10c55d3be98d5ea83c71e4ac6d
 con = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="Bagel01!",
+    password="",
     database="tastybytes_db"
 )
 
