@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>My Favorite Recipes</h1>
+<p class="subtitle">All the recipes you've saved in one place.</p>
+
+{% if favorites %}
+    <div class="recipe-grid">
+        {% for r in favorites %}
+        {# r is expected to be (recipe_id, title, description) just like in index.html #}
+        <a href="/recipe/{{ r[0] }}" class="recipe-card">
+            <h3>{{ r[1] }}</h3>
+            <p>{{ r[2][:120] }}...</p>
+        </a>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>You don’t have any favorite recipes yet.</p>
+    <a href="/recipes" class="btn">Browse Recipes</a>
+{% endif %}
+
+{% endblock %}
