@@ -1,8 +1,11 @@
 import mysql.connector
 from flask import Flask, render_template, request, redirect
+from flask import session
+from werkzeug.security import generate_password_hash, check_password_hash
 import re
 
 app = Flask(__name__)
+app.secret_key = "d93f1b063921f64b2f3ea042bd46c1f7fd0d10c55d3be98d5ea83c71e4ac6d4f"
 
 # -----------------------------
 # DATABASE CONNECTION
@@ -10,7 +13,7 @@ app = Flask(__name__)
 con = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="",
+    password="Bagel01!",
     database="tastybytes_db"
 )
 
@@ -94,10 +97,10 @@ def add_review(recipe_id):
     rating = request.form.get("rating")
     comment = request.form.get("comment", "").strip()
 
-    # Placeholder until login system exists
-    user_id = 1
+    user_id = session.get("user_id")
+    if not user_id:
+        return redirect("/login")
 
-    # Must have BOTH
     if not rating or not comment:
         return redirect(f"/recipe/{recipe_id}")
 
@@ -111,74 +114,134 @@ def add_review(recipe_id):
     return redirect(f"/recipe/{recipe_id}")
 
 
+
 # -----------------------------
 # CREATE NEW RECIPE (GET + POST)
 # -----------------------------
-@app.route('/create', methods=['GET', 'POST'])
+@app.route('/create', methods=["GET", "POST"])
 def create():
 
-    if request.method == "GET":
-        return render_template('createRecipe.html')
+    # ⭐ REQUIRE LOGIN before allowing access to form OR submit
+    user_id = session.get("user_id")
+    if not user_id:
+        return redirect("/login")
 
-    # -------------------------
-    # Process the form submission
-    # -------------------------
+    if request.method == "POST":
 
-    title = request.form.get("title")
-    description = request.form.get("description")
+        # Basic fields
+        title = request.form.get("title")
+        description = request.form.get("description")
+        cook_time = request.form.get("cook_time")
+        servings = request.form.get("servings")
 
-    # Clean cook time (strip "min", "minutes", etc.)
-    cook_time_raw = request.form.get("cook_time", "").strip()
-    cook_time = int(re.sub(r"\D", "", cook_time_raw) or 0)
+        # Lists from dynamic fields
+        instructions = request.form.getlist("instruction[]")
+        ingredients = request.form.getlist("ingredient[]")
 
-    # Clean servings
-    servings_raw = request.form.get("servings", "").strip()
-    servings = int(re.sub(r"\D", "", servings_raw) or 0)
+        # Combine instructions into a single text block
+        instructions_text = "\n".join([i for i in instructions if i.strip() != ""])
 
-    instructions_list = request.form.getlist("instructions")
-    instructions = "\n".join(instructions_list)
+        cursor = con.cursor()
 
-    ingredients_list = request.form.getlist("ingredients")
+        # ⭐ INSERT RECIPE WITH REAL LOGGED-IN USER
+        cursor.execute("""
+            INSERT INTO recipes (user_id, title, description, instructions, cook_time_min, servings)
+            VALUES (%s, %s, %s, %s, %s, %s)
+        """, (user_id, title, description, instructions_text, cook_time, servings))
 
-    cursor = con.cursor()
+        recipe_id = cursor.lastrowid
 
-    # Insert recipe
-    cursor.execute("""
-        INSERT INTO recipes (user_id, title, description, instructions, cook_time_min, servings)
-        VALUES (%s, %s, %s, %s, %s, %s)
-    """, (1, title, description, instructions, cook_time, servings))
+        # ⭐ INSERT INGREDIENTS INTO DATABASE
+        for ing in ingredients:
+            ing = ing.strip()
+            if ing != "":
+                cursor.execute("INSERT INTO ingredients (name) VALUES (%s)", (ing,))
+                ingredient_id = cursor.lastrowid
 
-    con.commit()
+                cursor.execute("""
+                    INSERT INTO recipe_ingredients (recipe_id, ingredient_id, quantity)
+                    VALUES (%s, %s, %s)
+                """, (recipe_id, ingredient_id, ""))
 
-    recipe_id = cursor.lastrowid
-
-    # Insert ingredients
-    for ing in ingredients_list:
-        ing = ing.strip()
-        if ing == "":
-            continue
-
-        cursor.execute("INSERT INTO ingredients (name) VALUES (%s)", (ing,))
-        ingredient_id = cursor.lastrowid
-
-        cursor.execute(
-            "INSERT INTO recipe_ingredients (recipe_id, ingredient_id, quantity) VALUES (%s, %s, %s)",
-            (recipe_id, ingredient_id, ""))
         con.commit()
 
-    return redirect(f"/recipe/{recipe_id}")
+        # Redirect to the brand new recipe page
+        return redirect(f"/recipe/{recipe_id}")
+
+    # GET request → show the form
+    return render_template("createRecipe.html")
+
+# -----------------------------
+# USER REGISTRATION
+# -----------------------------
+@app.route('/register', methods=["GET", "POST"])
+def register_user():
+    if request.method == "POST":
+
+        username = request.form.get("username").strip()
+        email = request.form.get("email").strip().lower()
+        password = request.form.get("password")
+
+        # Basic validation
+        if not username or not email or not password:
+            return render_template("register.html", error="All fields are required.")
+
+        cursor = con.cursor(dictionary=True)
+
+        # Check if email already exists
+        cursor.execute("SELECT * FROM users WHERE email=%s", (email,))
+        exists = cursor.fetchone()
+        if exists:
+            return render_template("register.html", error="Email already registered.")
+
+        # Hash password
+        hashed = generate_password_hash(password)
+
+        cursor.execute("""
+            INSERT INTO users (username, email, password_hash)
+            VALUES (%s, %s, %s)
+        """, (username, email, hashed))
+
+        con.commit()
+
+        return redirect("/login")
+
+    return render_template("register.html")
 
 
 # -----------------------------
-# LOGIN / REGISTER
+# USER LOGIN
 # -----------------------------
-@app.route('/login')
-def login():
-    return render_template('login.html')
+@app.route('/login', methods=["GET", "POST"])
+def login_user():
+    if request.method == "POST":
+        email = request.form.get("email").strip().lower()
+        password = request.form.get("password")
 
-@app.route('/register')
-def register():
-    return render_template('register.html')
+        cursor = con.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM users WHERE email=%s", (email,))
+        user = cursor.fetchone()
+
+        if not user or not check_password_hash(user["password_hash"], password):
+            return render_template("login.html", error="Invalid email or password.")
+
+        # Save session
+        session["user_id"] = user["user_id"]
+        session["username"] = user["username"]
+
+        return redirect("/")
+
+    return render_template("login.html")
+
+
+# -----------------------------
+# LOGOUT
+# -----------------------------
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect("/")
+
 
 
 # -----------------------------

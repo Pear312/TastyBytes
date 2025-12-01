@@ -1,19 +1,30 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h1>Create an Account</h1>
+<h2>Create Account</h2>
 
-<form action="/register" method="POST" class="form">
-    <label>Username</label>
-    <input type="text" name="username">
+<form action="/register" method="POST">
 
-    <label>Email</label>
-    <input type="email" name="email">
+    {% if error %}
+    <p style="color:red;">{{ error }}</p>
+    {% endif %}
 
-    <label>Password</label>
-    <input type="password" name="password">
+    <label>Username</label><br>
+    <input type="text" name="username" required>
 
-    <button class="btn">Register</button>
+    <br><br>
+
+    <label>Email</label><br>
+    <input type="email" name="email" required>
+
+    <br><br>
+
+    <label>Password</label><br>
+    <input type="password" name="password" required>
+
+    <br><br>
+
+    <button type="submit">Register</button>
 </form>
 
 {% endblock %}
