@@ -121,7 +121,7 @@ def add_review(recipe_id):
 @app.route('/create', methods=["GET", "POST"])
 def create():
 
-    # ⭐ REQUIRE LOGIN before allowing access to form OR submit
+    # REQUIRE LOGIN before allowing access to form OR submit
     user_id = session.get("user_id")
     if not user_id:
         return redirect("/login")
@@ -143,7 +143,6 @@ def create():
 
         cursor = con.cursor()
 
-        # ⭐ INSERT RECIPE WITH REAL LOGGED-IN USER
         cursor.execute("""
             INSERT INTO recipes (user_id, title, description, instructions, cook_time_min, servings)
             VALUES (%s, %s, %s, %s, %s, %s)
@@ -151,7 +150,7 @@ def create():
 
         recipe_id = cursor.lastrowid
 
-        # ⭐ INSERT INGREDIENTS INTO DATABASE
+        # INSERT INGREDIENTS INTO DATABASE
         for ing in ingredients:
             ing = ing.strip()
             if ing != "":
