@@ -18,6 +18,28 @@
 <h1>{{ recipe.title }}</h1>
 <p style="font-size: 18px; color: #555;">{{ recipe.description }}</p>
 
+{% if session.get("user_id") %}
+    <form action="/favorite/{{ recipe.recipe_id }}" method="POST">
+        <button type="submit"
+            class="favorite-btn"
+            style="
+                padding: 8px 14px;
+                border-radius: 6px;
+                border: none;
+                font-weight: bold;
+                cursor: pointer;
+                background-color: {% if is_favorited %}#28a745{% else %}#ff6b6b{% endif %};
+                color: white;
+            ">
+            {% if is_favorited %}
+                ✓ Added to Favorites
+            {% else %}
+                ❤️ Add to Favorites
+            {% endif %}
+        </button>
+    </form>
+{% endif %}
+
 <div class="info-box">
     <p><strong>Cook Time:</strong> {{ recipe.cook_time_min }} min</p>
     <p><strong>Servings:</strong> {{ recipe.servings }}</p>
@@ -107,7 +129,6 @@
     function setRating(val) {
         document.getElementById("rating-input").value = val;
 
-        // Highlight the stars
         for (let i = 1; i <= 5; i++) {
             let s = document.getElementById("star-" + i);
             if (i <= val) s.style.color = "gold";
@@ -117,5 +138,4 @@
 </script>
 
 {% endif %}
-
 {% endblock %}
