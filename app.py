@@ -13,7 +13,7 @@ app.secret_key = "d93f1b063921f64b2f3ea042bd46c1f7fd0d10c55d3be98d5ea83c71e4ac6d
 con = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="",
+    password="Bagel01!",
     database="tastybytes_db"
 )
 
@@ -79,7 +79,6 @@ def recipe(recipe_id):
     """, (recipe_id,))
     comments = cursor.fetchall()
 
-    # ⭐ FAVORITE STATUS (true/false)
     user_id = session.get("user_id")
     is_favorited = False
 
@@ -214,6 +213,8 @@ def create():
         # Lists from dynamic fields
         instructions = request.form.getlist("instruction[]")
         ingredients = request.form.getlist("ingredient[]")
+        
+        tags_list = [t.strip().lower() for t in request.form.getlist("tags") if t.strip()]
 
         # Combine instructions into a single text block
         instructions_text = "\n".join([i for i in instructions if i.strip() != ""])
@@ -240,6 +241,32 @@ def create():
                 """, (recipe_id, ingredient_id, ""))
 
         con.commit()
+        
+        # -----------------------------
+        # TAGS
+        # -----------------------------
+
+        cursor = con.cursor()
+
+        for tag in tags_list:
+            cursor.execute("SELECT tag_id FROM tags WHERE tag_name=%s", (tag,))
+            row = cursor.fetchone()
+
+            # Tag already exists
+            if row:
+                tag_id = row[0]
+            else:
+                # Create new tag
+                cursor.execute("INSERT INTO tags (tag_name) VALUES (%s)", (tag,))
+                tag_id = cursor.lastrowid
+
+            cursor.execute(
+                "INSERT INTO recipe_tags (recipe_id, tag_id) VALUES (%s, %s)",
+                (recipe_id, tag_id)
+            )
+
+        con.commit()
+
 
         # Redirect to the brand new recipe page
         return redirect(f"/recipe/{recipe_id}")

@@ -35,6 +35,14 @@
 
     <button type="button" onclick="addInstruction()" class="add-btn">+ Add Step</button>
 
+    <h3>Tags</h3>
+    <div id="tag-list" class="form-row">
+        <input type="text" name="tags" placeholder="Enter a tag">
+    </div>
+
+    <button type="button" onclick="addTag()" class="add-btn">+ Add Tag</button>
+
+
     <br><br>
 
     <button type="submit" class="submit-btn">Create Recipe</button>
@@ -60,6 +68,16 @@ function addInstruction() {
     input.placeholder = "Next Step";
     container.appendChild(input);
 }
+
+function addTag() {
+    const list = document.getElementById("tag-list");
+    const input = document.createElement("input");
+    input.type = "text";
+    input.name = "tags";
+    input.placeholder = "New tag";
+    list.appendChild(input);
+}
+
 </script>
 
 <style>
