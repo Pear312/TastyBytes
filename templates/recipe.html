@@ -43,6 +43,28 @@
 <h1>{{ recipe.title }}</h1>
 <p style="font-size: 18px; color: #555;">{{ recipe.description }}</p>
 
+
+{# choose an image file based on recipe_id #}
+{% if recipe.recipe_id == 1 %}
+    {% set img_file = 'images/spaghettiCarbonara.jpg' %}
+{% elif recipe.recipe_id == 2 %}
+    {% set img_file = 'images/chocolateChipCookies.jpg' %}
+{% elif recipe.recipe_id == 3 %}
+    {% set img_file = 'images/chickenStirFry.jpg' %}
+{% elif recipe.recipe_id == 4 %}
+    {% set img_file = 'images/avocadoToastWithEgg.jpg' %}
+{% elif recipe.recipe_id == 5 %}
+    {% set img_file = 'images/bbqGrilledChicken.jpg' %}
+{% else %}
+    {% set img_file = 'images/placeholder.jpg' %}
+{% endif %}
+
+<div class="recipe-hero">
+    <img src="{{ url_for('static', filename=img_file) }}"
+         alt="{{ recipe.title }}"
+         class="recipe-hero-img">
+</div>
+
 {% if session.get("user_id") %}
 <form action="/favorite/{{ recipe.recipe_id }}" method="POST">
     <button type="submit"
