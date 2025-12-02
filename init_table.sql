@@ -107,23 +107,59 @@ INSERT INTO users (username, email, password_hash) VALUES
 INSERT INTO recipes (user_id, title, description, instructions, cook_time_min, servings) VALUES
 (1, 'Spaghetti Carbonara',
     'Classic Italian pasta with eggs, cheese, pancetta, and pepper.',
-    '1. Cook spaghetti.\n2. Fry pancetta.\n3. Mix eggs and cheese.\n4. Combine all ingredients.',
+    'Cook spaghetti.
+Fry pancetta.
+Mix eggs and cheese.
+Combine all ingredients.',
     25, 4),
 (1, 'Chocolate Chip Cookies',
     'Soft and chewy cookies loaded with chocolate chips.',
-    '1. Mix dry ingredients.\n2. Cream butter and sugar.\n3. Add chocolate chips.\n4. Bake at 350°F for 12 minutes.',
+    'Mix dry ingredients.
+Cream butter and sugar.
+Add chocolate chips.
+Bake at 350 degrees F for 12 minutes.',
     30, 24),
 (1, 'Chicken Stir Fry',
     'Quick stir fried chicken and mixed vegetables with soy sauce.',
-    '1. Slice chicken.\n2. Stir fry vegetables.\n3. Add chicken and sauce.\n4. Serve with rice.',
+    'Slice chicken.
+Stir fry vegetables.
+Add chicken and sauce.
+Serve with rice.',
     20, 3),
 (1, 'Avocado Toast with Egg',
     'Healthy breakfast toast with mashed avocado and fried egg.',
-    '1. Toast bread.\n2. Mash avocado.\n3. Fry egg.\n4. Assemble toast and season.',
+    'Toast bread.
+Mash avocado.
+Fry egg.
+Assemble toast and season.',
     10, 1),
 (1, 'BBQ Grilled Chicken',
-    'Juicy grilled chicken coated in smoky BBQ sauce.',
-    '1. Season chicken.\n2. Grill 6 to 7 min each side.\n3. Add BBQ sauce.\n4. Grill 2 more minutes.',
+    'Juicy grilled chicken coated in smoky barbecue sauce.',
+    'Season chicken.
+Grill 6 to 7 minutes on each side.
+Brush with barbecue sauce.
+Grill 2 more minutes.',
+    35, 4),
+(1, 'Veggie Omelette',
+    'Fluffy omelette with peppers, onion, and cheese.',
+    'Beat eggs.
+Saute vegetables.
+Pour eggs into pan.
+Add cheese, fold, and cook until set.',
+    15, 1),
+(1, 'Classic Pancakes',
+    'Light and fluffy pancakes perfect for breakfast or brunch.',
+    'Mix dry ingredients.
+Whisk in milk, eggs, and butter.
+Cook batter on a hot pan until bubbles form.
+Flip and cook until golden.',
+    20, 4),
+(1, 'Tomato Basil Soup',
+    'Smooth tomato soup with fresh basil and a touch of cream.',
+    'Saute onion, carrot, and celery.
+Add tomatoes and broth and simmer.
+Blend until smooth.
+Stir in cream and basil and season to taste.',
     35, 4);
 
 INSERT INTO ingredients (name) VALUES
@@ -144,7 +180,22 @@ INSERT INTO ingredients (name) VALUES
 ('Salt'),
 ('BBQ Sauce'),
 ('Chicken Thighs'),
-('Olive Oil');
+('Olive Oil'),
+('Bell Pepper'),
+('Onion'),
+('Cheddar Cheese'),
+('All Purpose Flour'),
+('Baking Powder'),
+('Milk'),
+('Vanilla Extract'),
+('Maple Syrup'),
+('Tomatoes'),
+('Garlic'),
+('Basil'),              
+('Vegetable Broth'),
+('Heavy Cream'),
+('Carrot'),
+('Celery');
 
 INSERT INTO recipe_ingredients (recipe_id, ingredient_id, quantity) VALUES
 (1, 1, '200g'),
@@ -168,7 +219,31 @@ INSERT INTO recipe_ingredients (recipe_id, ingredient_id, quantity) VALUES
 (5, 17, '4 pieces'),
 (5, 16, '3 tbsp'),
 (5, 15, '1 tsp'),
-(5, 18, '1 tbsp');
+(5, 18, '1 tbsp'),
+(6, 2, '3'),
+(6, 19, '0.25 cup'),
+(6, 20, '0.25 cup'),
+(6, 21, '0.25 cup'),
+(6, 18, '1 teaspoon'),
+(6, 15, '1 pinch'),
+(7, 22, '1.5 cups'),
+(7, 23, '3.5 teaspoons'),
+(7, 7, '1 tablespoon'),
+(7, 24, '1.25 cups'),
+(7, 2, '1'),
+(7, 6, '3 tablespoons, melted'),
+(7, 25, '1 teaspoon'),
+(7, 26, 'For serving'),
+(8, 18, '1 tablespoon'),
+(8, 20, '0.5 cup'),
+(8, 32, '0.5 cup'),
+(8, 33, '0.5 cup'),
+(8, 28, '2 cloves'),
+(8, 27, '3 cups'),
+(8, 30, '3 cups'),
+(8, 31, '0.5 cup'),
+(8, 29, '0.25 cup'),
+(8, 15, 'To taste');
 
 INSERT INTO tags (tag_name) VALUES
 ('Italian'),
@@ -178,7 +253,10 @@ INSERT INTO tags (tag_name) VALUES
 ('Dinner'),
 ('Snack'),
 ('Breakfast'),
-('Grilled');
+('Grilled'),
+('Vegetarian'),
+('Soup'),
+('Brunch');
 
 INSERT INTO recipe_tags (recipe_id, tag_id) VALUES
 (1, 1),
@@ -191,16 +269,19 @@ INSERT INTO recipe_tags (recipe_id, tag_id) VALUES
 (4, 4),
 (4, 7),
 (5, 5),
-(5, 8);
-
-INSERT INTO categories (name) VALUES
-('Pasta'),
-('Baking'),
-('Asian'),
-('Main Course'),
-('Snacks'),
-('Breakfast'),
-('Grilling');
+(5, 8),
+(6, 3),
+(6, 4),
+(6, 7),
+(6, 9),
+(6, 11),
+(7, 2),
+(7, 7),
+(7, 11),
+(8, 4),
+(8, 5),
+(8, 9),
+(8, 10);
 
 INSERT INTO favorite_recipes (user_id, recipe_id) VALUES
 (1, 1),
@@ -274,3 +355,24 @@ INSERT INTO comments (recipe_id, user_id, rating, comment) VALUES
 (5, 4, 5, 'Perfect summer grill recipe!'),
 (5, 5, 4, 'Used homemade BBQ sauce. Such great flavor.'),
 (5, 7, 5, 'My goto grilled chicken recipe now!');
+
+INSERT INTO comments (recipe_id, user_id, rating, comment) VALUES
+(6, 2, 4, 'Great protein packed breakfast. I added spinach and it came out awesome.'),
+(6, 3, 5, 'Fast and filling. The veggies stay crunchy and the cheese melts perfectly.'),
+(6, 4, 5, 'Perfect weekday breakfast, took me less than 15 minutes.'),
+(6, 5, 4, 'Nice way to use leftover vegetables. I added mushrooms too.'),
+(6, 7, 5, 'My new favorite brunch omelette, light but still satisfying.');
+
+INSERT INTO comments (recipe_id, user_id, rating, comment) VALUES
+(7, 1, 5, 'These pancakes were super fluffy and browned evenly in the pan.'),
+(7, 3, 4, 'Great basic recipe. I added blueberries and they turned out great.'),
+(7, 4, 5, 'Crowd pleaser for brunch. Everyone asked for seconds.'),
+(7, 6, 5, 'Love how simple this is. Maple syrup on top made it perfect.'),
+(7, 7, 4, 'Nice and light. I cooked them a little longer for extra color.');
+
+INSERT INTO comments (recipe_id, user_id, rating, comment) VALUES
+(8, 2, 5, 'Rich tomato flavor and very smooth. Tastes like a restaurant soup.'),
+(8, 3, 4, 'Comforting and cozy. I served it with grilled cheese sandwiches.'),
+(8, 5, 5, 'So easy to make and the fresh basil makes a big difference.'),
+(8, 6, 4, 'Great weeknight soup. I used canned tomatoes and it was still very good.'),
+(8, 7, 5, 'Perfect for cold days. I will be making this again soon.');
