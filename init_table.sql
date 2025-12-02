@@ -80,26 +80,6 @@ CREATE TABLE recipe_tags (
         ON UPDATE CASCADE
 );
 
-CREATE TABLE categories (
-    category_id INT AUTO_INCREMENT,
-    name VARCHAR(255),
-    PRIMARY KEY(category_id)
-);
-
-CREATE TABLE recipe_categories (
-    recipe_id INT,
-    category_id INT,
-    PRIMARY KEY(recipe_id, category_id),
-    FOREIGN KEY(recipe_id)
-        REFERENCES recipes(recipe_id)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
-    FOREIGN KEY(category_id)
-        REFERENCES categories(category_id)
-        ON DELETE RESTRICT
-        ON UPDATE CASCADE
-);
-
 CREATE TABLE ingredients (
     ingredient_id INT AUTO_INCREMENT,
     name VARCHAR(255),
@@ -221,17 +201,6 @@ INSERT INTO categories (name) VALUES
 ('Snacks'),
 ('Breakfast'),
 ('Grilling');
-
-INSERT INTO recipe_categories (recipe_id, category_id) VALUES
-(1, 1),
-(1, 4),
-(2, 2),
-(2, 5),
-(3, 3),
-(3, 4),
-(4, 6),
-(5, 4),
-(5, 7);
 
 INSERT INTO favorite_recipes (user_id, recipe_id) VALUES
 (1, 1),
