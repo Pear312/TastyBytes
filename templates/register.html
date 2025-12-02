@@ -1,30 +1,30 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h2>Create Account</h2>
+<h1 class="page-title">Create Account</h1>
+<p class="subtitle">Join TastyBytes today!</p>
 
+<div class="form-box">
 <form action="/register" method="POST">
 
     {% if error %}
     <p style="color:red;">{{ error }}</p>
     {% endif %}
 
-    <label>Username</label><br>
+    <label>Username</label>
     <input type="text" name="username" required>
 
-    <br><br>
-
-    <label>Email</label><br>
+    <label>Email</label>
     <input type="email" name="email" required>
 
-    <br><br>
-
-    <label>Password</label><br>
+    <label>Password</label>
     <input type="password" name="password" required>
 
-    <br><br>
+    <div style="text-align:center; margin-top: 10px;">
+        <button type="submit" class="btn">Register</button>
+    </div>
 
-    <button type="submit">Register</button>
 </form>
+</div>
 
 {% endblock %}

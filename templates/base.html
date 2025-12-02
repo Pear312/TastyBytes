@@ -8,7 +8,10 @@
 <body>
 
 <nav class="navbar">
-    <div class="logo">TastyBytes</div>
+    <div class="logo">
+        <img src="{{ url_for('static', filename='forkknifeicon.png') }}" class="logo-icon">
+        TastyBytes
+    </div>
     <ul>
         <li><a href="/">Home</a></li>
         <li><a href="/recipes">Recipes</a></li>

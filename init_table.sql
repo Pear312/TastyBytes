@@ -134,8 +134,8 @@ INSERT INTO recipes (user_id, title, description, instructions, cook_time_min, s
     '1. Mix dry ingredients.\n2. Cream butter and sugar.\n3. Add chocolate chips.\n4. Bake at 350°F for 12 minutes.',
     30, 24),
 (1, 'Chicken Stir Fry',
-    'Quick stir-fried chicken and mixed vegetables with soy sauce.',
-    '1. Slice chicken.\n2. Stir-fry vegetables.\n3. Add chicken and sauce.\n4. Serve with rice.',
+    'Quick stir fried chicken and mixed vegetables with soy sauce.',
+    '1. Slice chicken.\n2. Stir fry vegetables.\n3. Add chicken and sauce.\n4. Serve with rice.',
     20, 3),
 (1, 'Avocado Toast with Egg',
     'Healthy breakfast toast with mashed avocado and fried egg.',
@@ -143,7 +143,7 @@ INSERT INTO recipes (user_id, title, description, instructions, cook_time_min, s
     10, 1),
 (1, 'BBQ Grilled Chicken',
     'Juicy grilled chicken coated in smoky BBQ sauce.',
-    '1. Season chicken.\n2. Grill 6–7 min each side.\n3. Add BBQ sauce.\n4. Grill 2 more minutes.',
+    '1. Season chicken.\n2. Grill 6 to 7 min each side.\n3. Add BBQ sauce.\n4. Grill 2 more minutes.',
     35, 4);
 
 INSERT INTO ingredients (name) VALUES
@@ -240,29 +240,6 @@ INSERT INTO favorite_recipes (user_id, recipe_id) VALUES
 (1, 4),
 (1, 5);
 
-INSERT INTO comments (recipe_id, user_id, rating, comment) VALUES
-(1, 1, 5, 'Authentic flavor and super easy to make!'),
-(1, 1, 4, 'Really good, just added extra cheese.'),
-(1, 1, 5, 'Tasted exactly like a restaurant dish.'),
-(1, 1, 4, 'Quick meal—creamy and delicious.'),
-
-(2, 1, 5, 'Perfectly chewy and full of chocolate chips!'),
-(2, 1, 5, 'My kids devoured these! Best cookie recipe so far.'),
-(2, 1, 4, 'Great taste. I baked them 2 minutes less for extra softness.'),
-(2, 1, 5, 'Crispy edges and gooey center—amazing.'),
-
-(3, 1, 5, 'Healthy, quick, and delicious. Definitely making again!'),
-(3, 1, 4, 'Great weeknight dinner. Added extra soy sauce.'),
-(3, 1, 5, 'Simple and flavorful. Loved it!'),
-
-(4, 1, 4, 'Perfect breakfast! Light and tasty.'),
-(4, 1, 5, 'So simple yet so good. The fried egg is the best part.'),
-(4, 1, 4, 'Easy and healthy—my new go-to morning meal.'),
-
-(5, 1, 5, 'Smoky and tender—everyone loved it.'),
-(5, 1, 4, 'Great flavor. I marinated it longer for extra tenderness.'),
-(5, 1, 5, 'Restaurant quality! The BBQ glaze caramelized perfectly.');
-
 INSERT INTO users (username, email, password_hash) VALUES
 ('foodlover99', 'foodlover99@example.com', 'hash_abc'),
 ('chef_maria', 'maria@example.com', 'hash_def'),
@@ -272,29 +249,52 @@ INSERT INTO users (username, email, password_hash) VALUES
 ('quickmeals_kate', 'kate@example.com', 'hash_pqr');
 
 INSERT INTO comments (recipe_id, user_id, rating, comment) VALUES
+(1, 1, 5, 'Authentic flavor and super easy to make!'),
+(1, 3, 4, 'Really good, just added extra cheese.'),
+(1, 2, 5, 'Tasted exactly like a restaurant dish.'),
+(1, 1, 4, 'Quick meal, creamy and delicious.'),
+
+(2, 1, 5, 'Perfectly chewy and full of chocolate chips!'),
+(2, 4, 5, 'My kids devoured these! Best cookie recipe so far.'),
+(2, 1, 4, 'Great taste. I baked them 2 minutes less for extra softness.'),
+(2, 6, 5, 'Crispy edges and gooey center amazing.'),
+
+(3, 1, 5, 'Healthy, quick, and delicious. Definitely making again!'),
+(3, 7, 4, 'Great weeknight dinner. Added extra soy sauce.'),
+(3, 5, 5, 'Simple and flavorful. Loved it!'),
+
+(4, 5, 4, 'Perfect breakfast! Light and tasty.'),
+(4, 1, 5, 'So simple yet so good. The fried egg is the best part.'),
+(4, 2, 4, 'Easy and healthy! My new goto morning meal.'),
+
+(5, 3, 5, 'Smoky and tender! Everyone loved it.'),
+(5, 1, 4, 'Great flavor. I marinated it longer for extra tenderness.'),
+(5, 6, 5, 'Restaurant quality! The BBQ glaze caramelized perfectly.');
+
+INSERT INTO comments (recipe_id, user_id, rating, comment) VALUES
 (1, 2, 5, 'Absolutely delicious. Tasted just like what I had in Rome!'),
 (1, 3, 4, 'Very good, but I added garlic for extra flavor.'),
-(1, 4, 5, 'Perfect weeknight meal—simple and creamy.'),
+(1, 4, 5, 'Perfect weeknight meal simple and creamy.'),
 (1, 6, 4, 'Great base recipe. I used guanciale instead of pancetta.'),
 (1, 7, 5, 'My kids loved it. Definitely making this again!');
 
 INSERT INTO comments (recipe_id, user_id, rating, comment) VALUES
 (2, 2, 5, 'Soft, chewy, and not overly sweet. Perfect!'),
 (2, 5, 4, 'Turned out great. I chilled the dough overnight.'),
-(2, 6, 5, 'Best cookie recipe online—hands down.'),
+(2, 6, 5, 'Best cookie recipe online hands down.'),
 (2, 7, 4, 'Delicious! I used dark chocolate chunks.'),
-(2, 4, 5, 'A huge hit at work—gone in minutes!');
+(2, 4, 5, 'A huge hit at work, gone in minutes!');
 
 INSERT INTO comments (recipe_id, user_id, rating, comment) VALUES
 (3, 3, 5, 'Fast, healthy, and super tasty.'),
 (3, 4, 4, 'Nice flavor. I added mushrooms.'),
 (3, 5, 5, 'My new favorite stir fry!'),
 (3, 6, 4, 'Added chili flakes for heat. Worked great.'),
-(3, 7, 5, 'Simple and flavorful—perfect quick meal.');
+(3, 7, 5, 'Simple and flavorful perfect quick meal.');
 
 INSERT INTO comments (recipe_id, user_id, rating, comment) VALUES
 (4, 2, 4, 'Great breakfast! Added lime.'),
-(4, 3, 5, 'I topped it with microgreens—amazing.'),
+(4, 3, 5, 'I topped it with microgreens! Amazing.'),
 (4, 5, 4, 'Used sourdough. Perfect combo.'),
 (4, 6, 5, 'Perfect quick meal. Highly recommend.'),
 (4, 7, 4, 'Simple and tasty!');
@@ -303,5 +303,5 @@ INSERT INTO comments (recipe_id, user_id, rating, comment) VALUES
 (5, 2, 5, 'Smoky, tender, and juicy.'),
 (5, 3, 4, 'Marinated overnight and turned out amazing.'),
 (5, 4, 5, 'Perfect summer grill recipe!'),
-(5, 5, 4, 'Used homemade BBQ sauce—great flavor.'),
-(5, 7, 5, 'My go-to grilled chicken recipe now!');
+(5, 5, 4, 'Used homemade BBQ sauce. Such great flavor.'),
+(5, 7, 5, 'My goto grilled chicken recipe now!');
