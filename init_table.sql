@@ -202,17 +202,6 @@ INSERT INTO categories (name) VALUES
 ('Breakfast'),
 ('Grilling');
 
-INSERT INTO recipe_categories (recipe_id, category_id) VALUES
-(1, 1),
-(1, 4),
-(2, 2),
-(2, 5),
-(3, 3),
-(3, 4),
-(4, 6),
-(5, 4),
-(5, 7);
-
 INSERT INTO favorite_recipes (user_id, recipe_id) VALUES
 (1, 1),
 (1, 2),
