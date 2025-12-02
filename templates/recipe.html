@@ -101,8 +101,15 @@
 
 <h2>Instructions</h2>
 <ol>
-    {% for step in recipe.instructions.split('\n') %}
-        {% set clean_step = step %}
+    {% for step in recipe.instructions.split('\n') if step.strip() %}
+        {% set s = step.strip() %}
+        
+        {% if s[0].isdigit() and '.' in s %}
+            {% set clean_step = s.split('.', 1)[1].strip() %}
+        {% else %}
+            {% set clean_step = s %}
+        {% endif %}
+
         <li>{{ clean_step }}</li>
     {% endfor %}
 </ol>
