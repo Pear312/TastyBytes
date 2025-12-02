@@ -5,7 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import re
 
 app = Flask(__name__)
-app.secret_key = "d93f1b063921f64b2f3ea042bd46c1f7fd0d10c55d3be98d5ea83c71e4ac6d4f"
+app.secret_key = "d93f1b063921f64b2f3ea042bd46c1f7fd0d10c55d3be98d5ea83c71e4ac6d4f" 
 
 # -----------------------------
 # DATABASE CONNECTION
@@ -13,7 +13,7 @@ app.secret_key = "d93f1b063921f64b2f3ea042bd46c1f7fd0d10c55d3be98d5ea83c71e4ac6d
 con = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="your_password_here",
+    password="",
     database="tastybytes_db"
 )
 
@@ -317,7 +317,7 @@ def create():
 
         con.commit()
         
-        # TAGS
+        # INSERT TAGS INTO DATABASE
 
         cursor = con.cursor()
 
@@ -344,7 +344,6 @@ def create():
         # Redirect to the brand new recipe page
         return redirect(f"/recipe/{recipe_id}")
 
-    # GET request → show the form
     return render_template("createRecipe.html")
 
 # -----------------------------
@@ -435,8 +434,5 @@ def search():
     return render_template('recipe.html', recipe_list=results)
 
 
-# -----------------------------
-# RUN FLASK APP
-# -----------------------------
 if __name__ == "__main__":
     app.run(debug=True)
