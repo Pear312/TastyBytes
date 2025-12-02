@@ -1,4 +1,4 @@
-# !TastyBytes
+# TastyBytes
 
 # Env for database
 - Create .env file and put the following inside (replace yourpassword)
