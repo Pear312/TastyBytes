@@ -1,22 +1,47 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h1 class="title">Find Your Next Favorite Recipe</h1>
+<h1 class="page-title">Discover Recipes</h1>
+<p class="subtitle">Find dishes you'll love.</p>
 
-<form class="search-bar" action="/search">
-    <input type="text" name="q" placeholder="Search recipes...">
-    <button>Search</button>
-</form>
+<div class="search-bar">
+    <form action="/search">
+        <input type="text" name="q" placeholder="Search recipes...">
+        <button type="submit">Search</button>
+    </form>
+</div>
 
-<h2 class="section-title">Featured Recipes</h2>
+<div class="recipe-layout">
 
-<div class="recipe-grid">
-    {% for r in recipes %}
-    <a href="/recipe/{{ r[0] }}" class="recipe-card">
-        <h3>{{ r[1] }}</h3>
-        <p>{{ r[2][:80] }}...</p>
-    </a>
-    {% endfor %}
+    <!-- FILTER SIDEBAR -->
+    <div class="filter-sidebar">
+        <h3>Filter by Tags</h3>
+
+        <form action="/" method="GET" class="filter-form">
+            {% for t in tags %}
+            <label class="filter-item">
+                <input type="checkbox"
+                       name="tags"
+                       value="{{ t.tag_id }}"
+                       {% if t.tag_id|string in selected %}checked{% endif %}>
+                {{ t.tag_name }}
+            </label>
+            {% endfor %}
+
+            <button class="btn" style="margin-top:10px;">Apply Filters</button>
+        </form>
+    </div>
+
+    <!-- RECIPE CARDS -->
+    <div class="recipe-grid">
+        {% for r in recipes %}
+        <a href="/recipe/{{ r.recipe_id }}" class="recipe-card">
+            <h3>{{ r.title }}</h3>
+            <p>{{ r.description[:120] }}...</p>
+        </a>
+        {% endfor %}
+    </div>
+
 </div>
 
 {% endblock %}
