@@ -362,3 +362,108 @@ button.btn:hover {
     width: 28px;
     height: 28px;
 }
+
+/* =============================== */
+/*          FILTER SIDEBAR         */
+/* =============================== */
+
+.recipe-layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 25px;
+    margin-top: 25px;
+}
+
+.filter-sidebar {
+    background: white;
+    padding: 18px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    height: fit-content;
+}
+
+.filter-sidebar h3 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 18px;
+}
+
+.filter-item {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 15px;
+}
+
+.filter-item input {
+    margin-right: 6px;
+}
+
+.filter-box {
+    background: white;
+    padding: 20px;
+    width: 200px;
+    border-radius: 8px;
+    height: fit-content;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* =============================== */
+/*          TAGLIST SIDEBAR         */
+/* =============================== */
+
+.tag-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.tag-checkbox input {
+    margin-right: 6px;
+}
+
+.apply-btn {
+    background: #ffba00;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    color: black;
+    font-weight: 600;
+}
+
+/* =============================== */
+/*     FAVORITES RECIPE CARD       */
+/* =============================== */
+.recipe-card a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.recipe-card h3 {
+    color: #333;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.recipe-card p {
+    color: #555;
+    font-size: 15px;
+    line-height: 1.4;
+}
+
+.recipe-card {
+    display: block;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.recipe-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}

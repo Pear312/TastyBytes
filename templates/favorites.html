@@ -1,31 +1,50 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h1>My Favorite Recipes</h1>
+<h1 class="page-title">My Favorite Recipes</h1>
 <p class="subtitle">All the recipes you've saved in one place.</p>
 
-{% if favorites %}
+<div class="recipe-layout">
+
+    <!-- FILTER SIDEBAR -->
+    <div class="filter-sidebar">
+        <h3>Filter by Tags</h3>
+
+        <form action="/favorites" method="GET" class="filter-form">
+            {% for t in all_tags %}
+            <label class="filter-item">
+                <input type="checkbox" name="tags" value="{{ t.tag_id }}"
+                    {% if t.tag_id|string in selected_tags %}checked{% endif %}>
+                {{ t.tag_name }}
+            </label>
+            {% endfor %}
+            <button class="btn" style="margin-top:10px;">Apply</button>
+        </form>
+    </div>
+
+    <!-- FAVORITE RECIPE CARDS -->
     <div class="recipe-grid">
         {% for r in favorites %}
-        <div class="recipe-card" style="position:relative;">
-            <a href="/recipe/{{ r[0] }}">
-                <h3>{{ r[1] }}</h3>
-                <p>{{ r[2][:120] }}...</p>
+        <div class="recipe-card">
+
+            <a href="/recipe/{{ r.recipe_id }}">
+                <h3>{{ r.title }}</h3>
+                <p>{{ r.description[:120] }}...</p>
             </a>
 
-            <form action="/unfavorite/{{ r[0] }}" method="POST" 
-                  style="position:absolute; top:10px; right:10px;">
-                <button type="submit" 
-                        style="background:none; border:none; color:red; font-size:20px; cursor:pointer;">
+            <!-- X BUTTON -->
+            <form action="/unfavorite/{{ r.recipe_id }}" method="POST"
+                style="position:absolute; top:10px; right:10px;">
+                <button type="submit"
+                    style="background:none; border:none; color:red; font-size:20px; cursor:pointer;">
                     ✖
                 </button>
             </form>
+
         </div>
         {% endfor %}
     </div>
-{% else %}
-    <p>You don’t have any favorite recipes yet.</p>
-    <a href="/recipes" class="btn">Browse Recipes</a>
-{% endif %}
+
+</div>
 
 {% endblock %}

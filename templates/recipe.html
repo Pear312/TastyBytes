@@ -4,40 +4,65 @@
 {% if recipe_list %}
 <h1>All Recipes</h1>
 
-<div class="recipe-grid">
-    {% for r in recipe_list %}
-    <a href="/recipe/{{ r[0] }}" class="recipe-card">
-        <h3>{{ r[1] }}</h3>
-        <p>{{ r[2][:120] }}...</p>
-    </a>
-    {% endfor %}
+<div class="recipe-layout">
+
+    <!-- FILTER SIDEBAR -->
+    <div class="filter-sidebar">
+        <h3>Filter by Tags</h3>
+
+        <form action="/recipes" method="GET" class="filter-form">
+            {% for t in all_tags %}
+            <label class="filter-item">
+                <input type="checkbox"
+                       name="tags"
+                       value="{{ t.tag_id }}"
+                       {% if t.tag_id|string in selected_tags %}checked{% endif %}>
+                {{ t.tag_name }}
+            </label>
+            {% endfor %}
+
+            <button class="btn" style="margin-top:10px;">Apply</button>
+        </form>
+    </div>
+
+    <!-- RECIPE GRID -->
+    <div class="recipe-grid">
+        {% for r in recipe_list %}
+        <a href="/recipe/{{ r.recipe_id }}" class="recipe-card">
+            <h3>{{ r.title }}</h3>
+            <p>{{ r.description[:120] }}...</p>
+        </a>
+        {% endfor %}
+    </div>
+
 </div>
 
 {% else %}
 
+<!-- SINGLE RECIPE PAGE -->
 <h1>{{ recipe.title }}</h1>
 <p style="font-size: 18px; color: #555;">{{ recipe.description }}</p>
 
 {% if session.get("user_id") %}
-    <form action="/favorite/{{ recipe.recipe_id }}" method="POST">
-        <button type="submit"
-            class="favorite-btn"
-            style="
-                padding: 8px 14px;
-                border-radius: 6px;
-                border: none;
-                font-weight: bold;
-                cursor: pointer;
-                background-color: {% if is_favorited %}#28a745{% else %}#ff6b6b{% endif %};
-                color: white;
-            ">
-            {% if is_favorited %}
-                ✓ Added to Favorites
-            {% else %}
-                ❤️ Add to Favorites
-            {% endif %}
-        </button>
-    </form>
+<form action="/favorite/{{ recipe.recipe_id }}" method="POST">
+    <button type="submit"
+        class="favorite-btn"
+        style="
+            padding: 8px 14px;
+            border-radius: 6px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: {% if is_fav %}#28a745{% else %}#ff6b6b{% endif %};
+            color: white;
+        ">
+        {% if is_fav %}
+            ✓ Added to Favorites
+        {% else %}
+            ❤️ Add to Favorites
+        {% endif %}
+    </button>
+</form>
 {% endif %}
 
 <div class="info-box">
@@ -55,14 +80,7 @@
 <h2>Instructions</h2>
 <ol>
     {% for step in recipe.instructions.split('\n') %}
-        {% if '. ' in step %}
-            {% set clean_step = step.split('. ', 1)[1]
-                                    .replace('°F','F')
-                                    .replace('°','')
-                                    .replace('Â°','') %}
-        {% else %}
-            {% set clean_step = step %}
-        {% endif %}
+        {% set clean_step = step %}
         <li>{{ clean_step }}</li>
     {% endfor %}
 </ol>
@@ -81,7 +99,6 @@
         <strong>{{ c.username or "Anonymous" }}</strong>
 
         {% if c.rating %}
-            &nbsp;
             {% for i in range(c.rating) %}
                 <span class="star">★</span>
             {% endfor %}
@@ -98,44 +115,6 @@
     </li>
     {% endfor %}
 </ul>
-
-<hr>
-
-<h3>Leave a Review</h3>
-
-<form action="/review/{{ recipe.recipe_id }}" method="POST" class="review-form">
-
-    <!-- STAR RATING -->
-    <div class="star-rate">
-        {% for i in range(1,6) %}
-            <button 
-                type="button" 
-                class="star-button" 
-                onclick="setRating({{ i }})"
-                id="star-{{ i }}"
-            >★</button>
-        {% endfor %}
-    </div>
-
-    <input type="hidden" name="rating" id="rating-input" required>
-
-    <!-- COMMENT TEXT -->
-    <textarea name="comment" placeholder="Write your comment..." required></textarea>
-
-    <button type="submit" class="submit-review-btn">Submit Review</button>
-</form>
-
-<script>
-    function setRating(val) {
-        document.getElementById("rating-input").value = val;
-
-        for (let i = 1; i <= 5; i++) {
-            let s = document.getElementById("star-" + i);
-            if (i <= val) s.style.color = "gold";
-            else s.style.color = "#ccc";
-        }
-    }
-</script>
 
 {% endif %}
 {% endblock %}

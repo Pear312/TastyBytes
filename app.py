@@ -18,14 +18,41 @@ con = mysql.connector.connect(
 )
 
 # -----------------------------
+# GET ALL TAGS
+# -----------------------------
+def get_all_tags():
+    cursor = con.cursor(dictionary=True)
+    cursor.execute("SELECT tag_id, tag_name FROM tags ORDER BY tag_name ASC")
+    return cursor.fetchall()
+
+
+# -----------------------------
 # HOME PAGE
 # -----------------------------
 @app.route('/')
 def index():
-    cursor = con.cursor()
-    cursor.execute("SELECT recipe_id, title, description FROM recipes LIMIT 6")
+    selected = request.args.getlist("tags")
+
+    cursor = con.cursor(dictionary=True)
+
+    if selected:
+        # Filter recipes that match ANY selected tag (OR logic)
+        query = """
+            SELECT DISTINCT recipes.recipe_id, recipes.title, recipes.description
+            FROM recipes
+            JOIN recipe_tags ON recipes.recipe_id = recipe_tags.recipe_id
+            WHERE recipe_tags.tag_id IN (%s)
+            LIMIT 20
+        """ % ",".join(["%s"] * len(selected))
+        cursor.execute(query, selected)
+    else:
+        cursor.execute("SELECT recipe_id, title, description FROM recipes LIMIT 20")
+
     recipes = cursor.fetchall()
-    return render_template('index.html', recipes=recipes)
+    tags = get_all_tags()
+
+    return render_template('index.html', recipes=recipes, tags=tags, selected=selected)
+
 
 
 # -----------------------------
@@ -33,25 +60,47 @@ def index():
 # -----------------------------
 @app.route('/recipes')
 def recipes():
-    cursor = con.cursor()
-    cursor.execute("SELECT recipe_id, title, description FROM recipes")
+    selected = request.args.getlist("tags")
+    cursor = con.cursor(dictionary=True)
+
+    if selected:
+        query = """
+            SELECT DISTINCT recipes.recipe_id, recipes.title, recipes.description
+            FROM recipes
+            JOIN recipe_tags ON recipes.recipe_id = recipe_tags.recipe_id
+            WHERE recipe_tags.tag_id IN (%s)
+        """ % ",".join(["%s"] * len(selected))
+        cursor.execute(query, selected)
+    else:
+        cursor.execute("SELECT recipe_id, title, description FROM recipes")
+
     recipes = cursor.fetchall()
-    return render_template('recipe.html', recipe_list=recipes)
+    tags = get_all_tags()
+
+    return render_template(
+        'recipe.html',
+        recipe_list=recipes,
+        all_tags=tags,
+        selected_tags=selected
+    )
+
 
 
 # -----------------------------
-# SINGLE RECIPE PAGE
+# SINGLE RECIPE PAGE (VIEW RECIPE)
 # -----------------------------
 @app.route('/recipe/<int:recipe_id>')
 def recipe(recipe_id):
 
     cursor = con.cursor(dictionary=True)
 
-    # Get recipe info
+    # Main recipe info
     cursor.execute("SELECT * FROM recipes WHERE recipe_id=%s", (recipe_id,))
     recipe = cursor.fetchone()
+    if not recipe:
+        return "Recipe not found", 404
 
-    # Get ingredients
+    # Ingredients
     cursor.execute("""
         SELECT ingredients.name, recipe_ingredients.quantity AS qty
         FROM recipe_ingredients
@@ -60,7 +109,7 @@ def recipe(recipe_id):
     """, (recipe_id,))
     ingredients = cursor.fetchall()
 
-    # Get tags
+    # Tags
     cursor.execute("""
         SELECT tags.tag_name
         FROM tags
@@ -79,15 +128,15 @@ def recipe(recipe_id):
     """, (recipe_id,))
     comments = cursor.fetchall()
 
+    # Check favorite status
     user_id = session.get("user_id")
-    is_favorited = False
-
+    is_fav = False
     if user_id:
         cursor.execute("""
-            SELECT * FROM favorite_recipes
+            SELECT * FROM favorite_recipes 
             WHERE user_id=%s AND recipe_id=%s
         """, (user_id, recipe_id))
-        is_favorited = cursor.fetchone() is not None
+        is_fav = cursor.fetchone() is not None
 
     return render_template(
         'recipe.html',
@@ -95,8 +144,51 @@ def recipe(recipe_id):
         ingredients=ingredients,
         tags=tags,
         comments=comments,
-        is_favorited=is_favorited
+        is_fav=is_fav
     )
+
+# -----------------------------
+# FAVORITES PAGE (GET)
+# -----------------------------
+@app.route('/favorites')
+def favorites_page():
+
+    user_id = session.get("user_id")
+    if not user_id:
+        return redirect("/login")
+
+    selected = request.args.getlist("tags")   # selected tag filters
+    cursor = con.cursor(dictionary=True)
+
+    if selected:
+        query = """
+            SELECT DISTINCT r.recipe_id, r.title, r.description
+            FROM favorite_recipes f
+            JOIN recipes r ON f.recipe_id = r.recipe_id
+            JOIN recipe_tags rt ON r.recipe_id = rt.recipe_id
+            WHERE f.user_id = %s AND rt.tag_id IN (%s)
+        """ % ("%s", ",".join(["%s"] * len(selected)))
+
+        cursor.execute(query, [user_id] + selected)
+
+    else:
+        cursor.execute("""
+            SELECT r.recipe_id, r.title, r.description
+            FROM favorite_recipes f
+            JOIN recipes r ON f.recipe_id = r.recipe_id
+            WHERE f.user_id = %s
+        """, (user_id,))
+
+    favorites = cursor.fetchall()
+    tags = get_all_tags()
+
+    return render_template(
+        'favorites.html',
+        favorites=favorites,
+        all_tags=tags,
+        selected_tags=selected
+    )
+
 
 
 # -----------------------------
@@ -152,25 +244,6 @@ def favorite(recipe_id):
 
     return redirect(f"/recipe/{recipe_id}")
 
-# -----------------------------
-# FAVORITE RECIPES PAGE
-# -----------------------------
-@app.route('/favorites')
-def favorites():
-    user_id = session.get("user_id")
-    if not user_id:
-        return redirect("/login")
-
-    cursor = con.cursor()
-    cursor.execute("""
-        SELECT recipes.recipe_id, recipes.title, recipes.description
-        FROM favorite_recipes
-        JOIN recipes ON recipes.recipe_id = favorite_recipes.recipe_id
-        WHERE favorite_recipes.user_id=%s
-    """, (user_id,))
-    favorites = cursor.fetchall()
-
-    return render_template("favorites.html", favorites=favorites)
 
 # -----------------------------
 # REMOVE FAVORITE RECIPE
