@@ -12,3 +12,5 @@ MYSQL_PWD=yourpassword
 - brew install mysql
 - brew services start mysql
 - ./run_table.sh
+
+![alt text](er_diagram.png)
