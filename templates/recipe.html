@@ -144,6 +144,77 @@
     </li>
     {% endfor %}
 </ul>
+<h3>Leave a Review</h3>
+
+{% if session.get("user_id") %}
+
+<form action="/review/{{ recipe.recipe_id }}" method="POST" class="review-form">
+
+    <div class="star-rate" style="margin-bottom: 10px;">
+        {% for i in range(1,6) %}
+            <button 
+                type="button" 
+                class="star-button"
+                id="star-{{ i }}"
+                onclick="setRating({{ i }})"
+                style="
+                    background:none;
+                    border:none;
+                    font-size:26px;
+                    cursor:pointer;
+                    color:#ccc;
+                "
+            >★</button>
+        {% endfor %}
+    </div>
+
+    <input type="hidden" name="rating" id="rating-input" required>
+
+    <textarea name="comment" placeholder="Write your comment..." 
+              required
+              style="
+                width:100%;
+                max-width:500px;
+                height:80px;
+                padding:8px;
+                border-radius:6px;
+                border:1px solid #ccc;
+                margin-bottom: 10px;
+              ">
+    </textarea>
+
+    <button type="submit" 
+            class="submit-review-btn"
+            style="
+                padding:8px 16px;
+                border-radius:6px;
+                border:none;
+                background:#ffa500;
+                color:white;
+                font-weight:bold;
+                cursor:pointer;
+            ">
+        Submit Review
+    </button>
+
+</form>
+
+<script>
+function setRating(val) {
+    document.getElementById("rating-input").value = val;
+
+    for (let i = 1; i <= 5; i++) {
+        let s = document.getElementById("star-" + i);
+        s.style.color = (i <= val) ? "gold" : "#ccc";
+    }
+}
+</script>
+
+{% else %}
+<p style="color:#888; margin-top:10px;">
+    <em>You must be logged in to leave a review.</em>
+</p>
+{% endif %}
 
 {% endif %}
 {% endblock %}
