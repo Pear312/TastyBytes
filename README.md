@@ -15,7 +15,7 @@ MYSQL_PWD=yourpassword
 
 
 # ER Diagram
-![alt text](er_diagram.png)
+![alt text](er_diagram_updated.png)
 
 # Relational Schema
 
